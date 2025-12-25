@@ -6,11 +6,21 @@ import Confetti from 'react-confetti'
 import { characters } from './characters'
 import { getQuestionById, getQuestions, type Question } from './words'
 
-const STORAGE_KEY = 'stranger-things-game:v1'
+const STORAGE_KEY = 'stranger-things-game:v2'
+const PERSIST_TTL_MS = 1000 * 60 * 60 * 6
 type PersistedGameState = {
-  v: 1
+  v: 2
   questionId: number
   guessedLetters: string[]
+  savedAt: number
+}
+
+function clearPersistedGameState() {
+  try {
+    window.localStorage.removeItem(STORAGE_KEY)
+  } catch {
+    // ignore
+  }
 }
 
 function loadPersistedGameState(): PersistedGameState | null {
@@ -21,9 +31,15 @@ function loadPersistedGameState(): PersistedGameState | null {
     if (!parsed || typeof parsed !== 'object') return null
 
     const obj = parsed as Partial<PersistedGameState>
-    if (obj.v !== 1) return null
+    if (obj.v !== 2) return null
     if (typeof obj.questionId !== 'number' || !Number.isFinite(obj.questionId)) return null
     if (!Array.isArray(obj.guessedLetters)) return null
+    if (typeof obj.savedAt !== 'number' || !Number.isFinite(obj.savedAt)) return null
+
+    if (Date.now() - obj.savedAt > PERSIST_TTL_MS) {
+      clearPersistedGameState()
+      return null
+    }
 
     const cleaned = obj.guessedLetters
       .filter((x): x is string => typeof x === 'string')
@@ -31,9 +47,10 @@ function loadPersistedGameState(): PersistedGameState | null {
       .filter((s) => /^[a-z]$/.test(s))
 
     return {
-      v: 1,
+      v: 2,
       questionId: obj.questionId,
       guessedLetters: Array.from(new Set(cleaned)),
+      savedAt: obj.savedAt,
     }
   } catch {
     return null
@@ -85,8 +102,17 @@ export default function App() {
     setGuessedLetters((currentLetters) => (currentLetters.includes(letter) ? currentLetters : [...currentLetters, letter]))
   }
 
+  function pickNextQuestion(excludeId?: number): Question {
+    let next = getQuestions()
+    if (excludeId == null) return next
+    for (let i = 0; i < 12 && next.id === excludeId; i++) {
+      next = getQuestions()
+    }
+    return next
+  }
+
   function startNewGame() {
-    setCurrentQuestion(getQuestions())
+    setCurrentQuestion(pickNextQuestion(currentQuestion.id))
     setGuessedLetters([])
     setStatusOverride(null)
   }
@@ -94,9 +120,10 @@ export default function App() {
   React.useEffect(() => {
     try {
       const payload: PersistedGameState = {
-        v: 1,
+        v: 2,
         questionId: currentQuestion.id,
         guessedLetters,
+        savedAt: Date.now(),
       }
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
     } catch {
@@ -217,6 +244,29 @@ export default function App() {
   return (
     <main>
       {isGameWon && <Confetti recycle={false} numberOfPieces={800} />}
+      <button
+        type="button"
+        className="btn-refresh"
+        onClick={() => {
+          clearPersistedGameState()
+          window.location.reload()
+        }}
+        aria-label="Refresh game"
+        title="Refresh"
+      >
+        <svg
+          className="btn-refresh-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            fill="currentColor"
+            d="M21 12a9 9 0 0 1-15.45 6.36l-1.4 1.4a1 1 0 0 1-1.7-.71V15a1 1 0 0 1 1-1h3.34a1 1 0 0 1 .71 1.7l-1.2 1.2A7 7 0 1 0 5 7h1a1 1 0 0 1 0 2H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1.7-.71L6.1 4.7A9 9 0 0 1 21 12Z"
+          />
+        </svg>
+      </button>
       <header>
         <h1 className="title">The Upside Down Is Spreading</h1>
         <p>Every wrong letter costs one life, you have eight chances before the Upside Down claims them all.</p>
