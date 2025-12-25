@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="The Upside Down Is Spreading">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="80%">
+      <stop offset="0%" stop-color="#ff1744" stop-opacity="0.28"/>
+      <stop offset="55%" stop-color="#8b0000" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#0b0b12"/>
+    </radialGradient>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <g filter="url(#softGlow)">
+    <path d="M110 220 C 240 130, 360 130, 500 220 C 640 310, 760 310, 900 220 C 1040 130, 1100 160, 1140 200" fill="none" stroke="#f9f4da" stroke-width="10" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="200" cy="240" r="14" fill="#ffea00"/>
+    <circle cx="360" cy="190" r="14" fill="#00e676"/>
+    <circle cx="520" cy="190" r="14" fill="#00e5ff"/>
+    <circle cx="680" cy="240" r="14" fill="#ff1744"/>
+    <circle cx="840" cy="190" r="14" fill="#ffea00"/>
+    <circle cx="1000" cy="240" r="14" fill="#00e676"/>
+  </g>
+
+  <g fill="#f9f4da" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif">
+    <text x="84" y="370" font-size="74" font-weight="800">The Upside Down Is Spreading</text>
+    <text x="84" y="440" font-size="36" opacity="0.9">Stranger Things trivia hangman with the alphabet wall lights</text>
+  </g>
+</svg>

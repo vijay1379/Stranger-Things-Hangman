@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# Note: Add a sitemap URL here after you deploy and know your final domain.

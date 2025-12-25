@@ -1,0 +1,415 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'MyCustomFont', sans-serif;
+    color: red;
+    min-height: 100dvh;
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative; /* Make sure the pseudo-element is positioned relative to the body */
+}
+
+/* Add a pseudo-element for the background image with opacity */
+body::before {
+    content: '';
+  position: fixed;
+  inset: 0;
+    background: url('./assets/background.png') no-repeat center center/cover; /* Adjust opacity (0 is fully transparent, 1 is fully opaque) */
+    z-index: -1; /* Ensure background is behind the content */
+}
+
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+@font-face {
+  font-family: 'MyCustomFont'; /* Name you will use in your CSS rules */
+  src: url('./assets/font/font.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+h1,h2,p{
+  margin: 0;
+}
+
+
+header > h1{
+  color: transparent; 
+  -webkit-text-stroke: 1px #B11226; /* For cross-browser compatibility, especially Firefox */
+  text-align: center;
+  font-size: clamp(1.85rem, 6vw, 2.5rem);
+  max-width: 500px;
+  text-shadow: 
+  0 0 6px rgba(0,0,0,0.9),
+  0 0 20px rgba(255,0,51,0.8);;
+}
+
+header > p{
+  margin-top: 10px;
+  text-align: center;
+  max-width: 500px;
+  color: #E6E6E6;
+  font-size: clamp(0.85rem, 3.4vw, 1rem);
+}
+
+section.game-status {
+  margin-top: 10px;
+  text-align: center;
+  min-height: 56px;
+  background: rgba(120, 0, 0, 0.65);
+  border: 1px solid rgba(255, 60, 60, 0.5);
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  color: #FFECEC;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.35);
+  border-radius: 5px;
+  width: 100%;
+  max-width: 500px;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.7rem;
+}
+
+section.game-status > h2,
+section.game-status .farewell-message {
+  font-size: clamp(0.95rem, 4vw, 1.05rem);
+  line-height: 1.2;
+}
+
+section.game-status .farewell-message {
+  max-width: 100%;
+  padding: 0 6px;
+  overflow-wrap: anywhere;
+}
+
+section.game-status.status-hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+section.game-status.won {
+  background: rgba(0, 60, 50, 0.75);
+  border: 1px solid rgba(0, 255, 180, 0.6);
+  color: #E6FFF7;
+  backdrop-filter: blur(6px);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 180, 0.4),
+    0 0 35px rgba(0, 255, 180, 0.2);
+  font-size: 0.7rem;
+}
+
+
+section.game-status.lost {
+  background: rgba(40, 0, 0, 0.85);
+  border: 1px solid rgba(255, 40, 40, 0.7);
+  color: #FFD6D6;
+  backdrop-filter: blur(6px);
+  font-size: 0.7rem;
+  box-shadow: 
+    0 0 20px rgba(255, 0, 0, 0.5),
+    0 0 45px rgba(120, 0, 0, 0.7);
+}
+
+section.game-status.farewell {
+  font-family: inherit;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(180, 0, 0, 0.35);
+  color: #E0E0E0;
+  font-size: 0.7rem;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+ 
+}
+
+.farewell-message {
+  margin: auto 0;
+}
+
+section.characters {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  max-width: 380px;
+  font-size: clamp(0.6rem, 2.6vw, 0.85rem);
+}
+
+span.characters {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  padding: 2px 5px;
+}
+
+span.characters.lost {
+  opacity: 0.35;
+  filter: grayscale(0.4);
+}
+
+span.characters.lost::before {
+  content: "💀";
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  font-size: 0.85rem;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: inherit;
+}
+
+
+section.letter-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(6px, 2.5vw, 8px);
+  margin-top: 20px;
+  flex-wrap: wrap;
+
+}
+
+section.letter-section .letter-gap {
+  width: clamp(10px, 3.2vw, 14px);
+}
+
+section.letter-section .letter-line-break {
+  flex-basis: 100%;
+  height: 0;
+}
+
+section.letter-section > span.letter-box {
+  height: clamp(28px, 8.8vw, 34px);
+  width: clamp(28px, 8.8vw, 34px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #323232;
+  border-bottom: 1px solid #F9F4DA;
+  color: #F9F4DA;
+  font-size: clamp(0.8rem, 3.6vw, 1rem);
+}
+
+section.letter-section > span.letter-box.missed-letter {
+  color: #B11226;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+section.keyboard {
+  --wire-color: #F9F4DA;
+  --key-col-width: clamp(26px, 7.2vw, 54px);
+  --bulb-width: clamp(10px, 2.8vw, 12px);
+  --bulb-height: clamp(14px, 3.8vw, 18px);
+  --letter-size: clamp(0.78rem, 3.9vw, 0.95rem);
+  width: 100%;
+  margin: 20px auto;
+}
+
+section.keyboard .wall {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 6vw, 28px);
+  width: 100%;
+  max-width: 980px;
+}
+
+section.keyboard .row {
+  --row-pad: clamp(6px, 3vw, 12px);
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 var(--row-pad);
+}
+
+section.keyboard .row::before {
+  content: '';
+  position: absolute;
+  top: calc(-1 * clamp(12px, 3.6vw, 14px));
+  left: var(--row-pad);
+  right: var(--row-pad);
+  height: clamp(18px, 5vw, 22px);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 60' preserveAspectRatio='none'%3E%3Cpath d='M0 35 Q 62.5 10 125 35 T 250 35 T 375 35 T 500 35 T 625 35 T 750 35 T 875 35 T 1000 35' fill='none' stroke='%23F9F4DA' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  opacity: 0.85;
+  z-index: 0;
+  pointer-events: none;
+}
+
+section.keyboard .letter-container:nth-child(odd) {
+  transform: translateY(clamp(-6px, -1.2vw, -4px));
+}
+
+section.keyboard .letter-container:nth-child(even) {
+  transform: translateY(clamp(4px, 1.2vw, 6px));
+}
+
+section.keyboard .letter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  width: var(--key-col-width);
+  cursor: pointer;
+
+}
+
+section.keyboard .letter-container.disabled {
+  cursor: not-allowed;
+}
+
+section.keyboard .letter-container.disabled .light:not(.lit) {
+  opacity: 0.6;
+}
+
+section.keyboard .light {
+  width: var(--bulb-width);
+  height: var(--bulb-height);
+  border-radius: 50% 50% 40% 40%;
+  background: rgba(255, 255, 255, 0.18);
+  margin-bottom: 5px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+section.keyboard .letter-container:hover .light:not(.lit) {
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+section.keyboard .letter-btn {
+  background: none;
+  border: none;
+  font-family: 'MyCustomFont', sans-serif;
+  font-size: var(--letter-size);
+  color: #F9F4DA;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-transform: uppercase;
+  user-select: none;
+  pointer-events: none;
+}
+
+@media (max-width: 360px) {
+  section.keyboard {
+    --key-col-width: clamp(22px, 7vw, 44px);
+  }
+}
+
+section.keyboard .light.cracked {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+  filter: grayscale(0.6);
+}
+
+section.keyboard .light.cracked::before,
+section.keyboard .light.cracked::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+section.keyboard .light.cracked::before {
+  background:
+    linear-gradient(135deg, transparent 45%, rgba(249, 244, 218, 0.55) 46%, rgba(249, 244, 218, 0.55) 48%, transparent 49%),
+    linear-gradient(35deg, transparent 52%, rgba(249, 244, 218, 0.45) 53%, rgba(249, 244, 218, 0.45) 55%, transparent 56%);
+  opacity: 0.8;
+}
+
+section.keyboard .light.cracked::after {
+  background:
+    radial-gradient(circle at 35% 40%, rgba(249, 244, 218, 0.35) 0 12%, transparent 13% 100%);
+  opacity: 0.6;
+}
+
+section.keyboard .letter-container:hover .letter-btn:not(.correct):not(.wrong) {
+  color: #8b0000;
+  animation: keyboard-shiver 0.3s infinite;
+}
+
+section.keyboard .letter-btn.correct {
+  transform: rotate(0deg) scale(1.1) !important;
+}
+
+section.keyboard .letter-btn.wrong {
+  color: rgba(249, 244, 218, 0.18) !important;
+  transform: scale(0.8) !important;
+}
+
+section.keyboard .lit { animation: keyboard-flicker 0.2s infinite alternate; }
+
+section.keyboard .light[data-color="blue"].lit { background: #00e5ff; box-shadow: 0 0 30px 15px rgba(0, 229, 255, 0.8); }
+section.keyboard .light[data-color="red"].lit { background: #ff1744; box-shadow: 0 0 30px 15px rgba(255, 23, 68, 0.8); }
+section.keyboard .light[data-color="yellow"].lit { background: #ffea00; box-shadow: 0 0 30px 15px rgba(255, 234, 0, 0.8); }
+section.keyboard .light[data-color="green"].lit { background: #00e676; box-shadow: 0 0 30px 15px rgba(0, 230, 118, 0.8); }
+
+@keyframes keyboard-shiver {
+  0% { transform: translate(1px, 1px); }
+  50% { transform: translate(-1px, -1px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes keyboard-flicker {
+  0% { opacity: 1; filter: brightness(1.2); }
+  100% { opacity: 0.8; filter: brightness(0.9); }
+}
+
+button.btn-new-game {
+  background: linear-gradient(135deg, #2A0F12, #4A1418);
+  color: #E6DADA;
+  border: 1px solid rgba(180, 60, 60, 0.45);
+  box-shadow:
+    0 0 14px rgba(120, 0, 0, 0.35),
+    inset 0 0 12px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 8px 16px;
+  height: 42px;
+  width: 210px;
+}
+button.btn-new-game:hover {
+  box-shadow:
+    0 0 22px rgba(180, 60, 60, 0.55),
+    inset 0 0 14px rgba(0, 0, 0, 0.5);
+
+}
+
+
+
+
