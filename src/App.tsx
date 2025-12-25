@@ -72,7 +72,25 @@ function getStableKillMessage(answerNormalized: string, wrongGuessCount: number,
   return KILL_MESSAGE_TEMPLATES[idx]!(name)
 }
 
+function getWindowSize(): { width: number; height: number } {
+  return {
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0,
+  }
+}
+
 export default function App() {
+  const [{ width: windowWidth, height: windowHeight }, setWindowSize] = React.useState(() => getWindowSize())
+
+  React.useEffect(() => {
+    function onResize() {
+      setWindowSize(getWindowSize())
+    }
+
+    window.addEventListener('resize', onResize, { passive: true })
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
   const [currentQuestion, setCurrentQuestion] = React.useState<Question>(() => {
     const saved = loadPersistedGameState()
     if (!saved) return getQuestions()
@@ -243,7 +261,15 @@ export default function App() {
 
   return (
     <main>
-      {isGameWon && <Confetti recycle={false} numberOfPieces={800} />}
+      {isGameWon && (
+        <Confetti
+          recycle={false}
+          numberOfPieces={800}
+          width={windowWidth}
+          height={windowHeight}
+          style={{ position: 'fixed', inset: 0, zIndex: 999, pointerEvents: 'none' }}
+        />
+      )}
       <button
         type="button"
         className="btn-refresh"
